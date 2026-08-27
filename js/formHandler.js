@@ -35,14 +35,31 @@ if (form) {
 
     clearMessage();
 
+    // 🔥 MATCHES YOUR NEW FORM + DB
     const data = {
-      name: document.getElementById("name").value.trim(),
+      full_name: document.getElementById("full_name").value.trim(),
       phone: document.getElementById("phone").value.trim(),
       code: document.getElementById("code").value.trim(),
-      address: document.getElementById("address").value.trim(),
+
+      province: document.getElementById("province").value.trim(),
+      district: document.getElementById("district").value.trim(),
+      municipality: document.getElementById("municipality").value.trim(),
+      ward: document.getElementById("ward").value.trim(),
+      local_area: document.getElementById("local_area").value.trim(),
+
       dealer_name: document.getElementById("dealer_name").value.trim(),
+      bill_name: document.getElementById("bill_name").value.trim(),
+      invoice_number: document.getElementById("invoice_number").value.trim(),
+      invoice_date: document.getElementById("invoice_date").value.trim(),
+
+      purchase_amount: Number(
+        document.getElementById("purchase_amount").value
+      )
     };
 
+    /* =========================
+       VALIDATION
+    ========================= */
     const validationError = validateForm(data);
     if (validationError) {
       showError(validationError);
@@ -57,21 +74,32 @@ if (form) {
 
     setLoading(false);
 
+    /* =========================
+       ERROR HANDLING
+    ========================= */
     if (error) {
       console.error(error);
 
       if (error.message.includes("foreign key")) {
-        showError("Invalid code ❌");
+        showError("Invalid coupon code ❌");
       } else if (error.message.includes("unique")) {
-        showError("Code already used ❌");
+        showError("This code is already used ❌");
       } else {
-        showError("Something went wrong ❌");
+        showError("Submission failed. Please try again ❌");
       }
 
       return;
     }
 
+    /* =========================
+       SUCCESS
+    ========================= */
     showSuccess();
+
     form.reset();
+
+    // Optional UX improvement
+    form.style.display = "none";
+    document.getElementById("successBox")?.classList.remove("hidden");
   });
 }

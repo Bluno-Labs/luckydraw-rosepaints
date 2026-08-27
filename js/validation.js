@@ -1,19 +1,57 @@
-// js/validation.js
+export function validateForm(data) {
 
-export function validateForm({ name, phone, code, address, dealer_name }) {
-  
-  if (!name || !phone || !code || !address || !dealer_name) {
-    return "All fields are required ❌";
+  const {
+    full_name,
+    phone,
+    code,
+    province,
+    district,
+    municipality,
+    ward,
+    local_area,
+    dealer_name,
+    bill_name,
+    invoice_number,
+    invoice_date,
+    purchase_amount
+  } = data;
+
+  // ✅ Required fields
+  if (
+    !full_name || !phone || !code ||
+    !province || !district || !municipality ||
+    !ward || !local_area ||
+    !dealer_name || !bill_name ||
+    !invoice_number || !invoice_date ||
+    !purchase_amount
+  ) {
+    return "Please fill all required fields ❌";
   }
 
-  // 7 digit numeric code
+  // ✅ Code validation
   if (!/^\d{7}$/.test(code)) {
-    return "Code must be 7 digits ❌";
+    return "Coupon code must be 7 digits ❌";
   }
 
-  // basic phone validation (adjust if needed)
+  // ✅ Phone validation
   if (!/^\d{7,15}$/.test(phone)) {
-    return "Invalid phone number ❌";
+    return "Invalid mobile number ❌";
+  }
+
+  // ✅ Ward (numeric)
+  if (!/^\d+$/.test(ward)) {
+    return "Ward must be a number ❌";
+  }
+
+  // ✅ Date format (YYYY-MM-DD)
+  const datePattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+  if (!datePattern.test(invoice_date)) {
+    return "Invalid date format (YYYY-MM-DD) ❌";
+  }
+
+  // ✅ Purchase amount
+  if (isNaN(purchase_amount) || Number(purchase_amount) <= 0) {
+    return "Invalid purchase amount ❌";
   }
 
   return null;
