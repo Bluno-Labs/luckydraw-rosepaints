@@ -4,7 +4,41 @@ import { setLoading, showError, showSuccess, clearMessage } from "./ui.js";
 
 const form = document.getElementById("entryForm");
 const scrollBtn = document.getElementById("scrollBtn");
+const dateInput = document.getElementById("invoice_date");
 
+if (dateInput) {
+  dateInput.addEventListener("keydown", (e) => {
+    if (
+      (e.key === "Backspace" && (e.target.selectionStart === 5 || e.target.selectionStart === 8)) ||
+      (e.key === "Delete" && (e.target.selectionStart === 4 || e.target.selectionStart === 7))
+    ) {
+      e.preventDefault();
+    }
+  });
+
+  dateInput.addEventListener("input", (e) => {
+    let value = e.target.value.replace(/\D/g, "");
+
+    if (value.length > 8) value = value.slice(0, 8);
+
+    let formatted = value;
+
+    if (value.length > 4) {
+      formatted = value.slice(0, 4) + "-" + value.slice(4);
+    }
+
+    if (value.length > 6) {
+      formatted =
+        value.slice(0, 4) +
+        "-" +
+        value.slice(4, 6) +
+        "-" +
+        value.slice(6);
+    }
+
+    e.target.value = formatted;
+  });
+}
 /* =========================
    SCROLL BUTTON LOGIC
 ========================= */
