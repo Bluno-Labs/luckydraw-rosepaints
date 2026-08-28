@@ -4,36 +4,40 @@ import { setLoading, showError, showSuccess, clearMessage } from "./ui.js";
 
 const form = document.getElementById("entryForm");
 const scrollBtn = document.getElementById("scrollBtn");
+
 const dateInput = document.getElementById("invoice_date");
 
 if (dateInput) {
-  dateInput.addEventListener("keydown", (e) => {
-    if (
-      (e.key === "Backspace" && (e.target.selectionStart === 5 || e.target.selectionStart === 8)) ||
-      (e.key === "Delete" && (e.target.selectionStart === 4 || e.target.selectionStart === 7))
-    ) {
-      e.preventDefault();
-    }
-  });
-
   dateInput.addEventListener("input", (e) => {
-    let value = e.target.value.replace(/\D/g, "");
+    let value = e.target.value;
 
-    if (value.length > 8) value = value.slice(0, 8);
+    // Allow digits + dash
+    value = value.replace(/[^\d-]/g, "");
 
-    let formatted = value;
+    // Prevent multiple dashes in wrong places
+    let parts = value.split("-");
 
-    if (value.length > 4) {
-      formatted = value.slice(0, 4) + "-" + value.slice(4);
+    // Rebuild from digits only
+    let digits = value.replace(/\D/g, "").slice(0, 8);
+
+    let formatted = "";
+
+    if (digits.length <= 4) {
+      formatted = digits;
+    } else if (digits.length <= 6) {
+      formatted = digits.slice(0, 4) + "-" + digits.slice(4);
+    } else {
+      formatted =
+        digits.slice(0, 4) +
+        "-" +
+        digits.slice(4, 6) +
+        "-" +
+        digits.slice(6);
     }
 
-    if (value.length > 6) {
-      formatted =
-        value.slice(0, 4) +
-        "-" +
-        value.slice(4, 6) +
-        "-" +
-        value.slice(6);
+    // 🔥 KEY FIX: If user manually typed dash, respect it
+    if (value.endsWith("-") && formatted.length < 10) {
+      formatted += "-";
     }
 
     e.target.value = formatted;
