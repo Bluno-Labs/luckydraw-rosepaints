@@ -77,7 +77,7 @@ if (form) {
     const data = {
       full_name: document.getElementById("full_name").value.trim(),
       phone: document.getElementById("phone").value.trim(),
-      code: document.getElementById("code").value.trim(),
+      code: document.getElementById("code").value.trim().toUpperCase(),
 
       province: document.getElementById("province").value.trim(),
       district: document.getElementById("district").value.trim(),

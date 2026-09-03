@@ -29,9 +29,9 @@ export function validateForm(data) {
   }
 
   // ✅ Code validation
-  if (!/^\d{7}$/.test(code)) {
-    return "Coupon code must be 7 digits ❌";
-  }
+  if (!/^[A-Z0-9]{6}$/.test(code)) {
+  return "Coupon code must be 6 characters (letters & numbers) ❌";
+}
 
   // ✅ Phone validation
   if (!/^\d{7,15}$/.test(phone)) {
